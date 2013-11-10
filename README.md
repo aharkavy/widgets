@@ -2,7 +2,7 @@
 
 Inkling is an interactive ebook reading application on iOS and the [Web](www.inkling.com). Inkling content is created using [Inkling Habitat](habitat.inkling.com). Inkling supports embeddable widgets to make content interactive.
 
-# Examples of Widgets
+# Examples
 
 The following are examples of widgets in Inkling content:
 
@@ -11,13 +11,15 @@ The following are examples of widgets in Inkling content:
 * [Javascript code console](https://www.inkling.com/read/javascript-definitive-guide-david-flanagan-6th/chapter-7/array-length)
 * [HTML5 code console](https://www.inkling.com/read/dummies-html5-tutorials-frank-boumphrey-1st/lesson-5/ch05-section-5)
 
-# Representation in Content
+# Spec
+
+## Representation in Content
 Widgets are represented in content using &lt;object&gt; with optional &lt;param&gt; tags.
 
 Example:
 
 ```
-<object type="text/html" data="weather.html">
+< object type="text/html" data="weather.html">
 	<param name="zipCode" value="94123"></param>
 </object>
 ```
@@ -25,15 +27,15 @@ Example:
 When an &lt;object&gt; tag is rendered by the reading system its parameters are added to its URL as querystring parameters. Example after reading system transformation:
 
 ```
-<object type=”text/html” data=”weather.html?zipCode=94123”></object>
+< object type=”text/html” data=”weather.html?zipCode=94123”></object>
 ```
 
-# Package format
+## Package format
 
-There currently isn't a pacakging format or manifest file required for Inkling widgets. All that's required is a single HTML file to point the &lt;object&gt; tag to.
+There currently isn't a packaging format or manifest file required for Inkling widgets. All that's required is a single HTML file to point the &lt;object&gt; tag to.
 
 
-# Reading Platform APIs
+## Javascript APIs
 
 These are APIs that a widget can use to communicate with the reading system. For ease of implementation it is modeled after the HTML5 postMessage API. The message protocol is:
 
@@ -46,8 +48,8 @@ These are APIs that a widget can use to communicate with the reading system. For
 ```
 
 
-## View API
-Allows a widget to change its viewport size.
+### View API
+Allows a widget to change its size in the content.
 
 #### Method: set
 Sets the widget’s size. Per the HTML5 spec, an &lt;object&gt; doesn’t expand to the dimensions of the content it contains. Instead, scrollbars will appear inside the element. This API allows a widget to request a new size.
@@ -78,7 +80,7 @@ window.parent.postMessage({
 }, ‘*’);
 ```
 
-## Message API
+### Message API
 A pub/sub message bus for widgets to communicate with each other on the same page. It’s useful when there are many widgets on a page that need to message each other in a partitioned way.
 
 
@@ -198,13 +200,13 @@ window.addEventListener('message', function(evt){
 });
 ```
 
-# Handling Input Events
+## Handling Input Events
 
 ___This is proposed but not yet implemented in Inkling___
 
 If a widget is using an input event, it should call event.preventDefault() to prevent reading system default behavior. For example, if a reading system uses a swipe gesture for navigation that competes with a slider widget, the widget should call preventDefault() on the touchmove event to let the reading system know not to handle it.
 
-# Widget Visbility API
+## Widget Visibility API
 
 ___This is proposed but not yet implemented in Inkling___
 
@@ -217,3 +219,15 @@ document.addEventListener("visibilityChange", function(){
 	}
 });
 ```
+
+# Implementation Details
+
+## Object vs Iframe
+
+Inkling converts object tags into iframes when the published content is rendered in the reading system. This is because of browser bugs such as https://bugs.webkit.org/show_bug.cgi?id=75395. IFrames are functionally equivalent to object tags.
+
+## Sandboxing
+Another benefit of rendering object tags as iframes is that iframes support the ‘sandbox’ attribute. Per the HTML5 spec, sandboxing prevents Javascript from accessing document.cookie, localStorage, and the parent window context. This forces widgets to be sandboxed when rendered inside a UIWebView on iOS.
+
+## Supporting IE8
+Chrome, Safari, mobile Webkit, Firefox, and IE 9/10 support sending objects over postMessage. However, IE8 only supports sending strings over postMessage. A workaround is to use JSON.stringify on all messages sent via postMessage.
