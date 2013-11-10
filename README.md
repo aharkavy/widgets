@@ -19,7 +19,7 @@ Widgets are represented in content using &lt;object&gt; with optional &lt;param&
 Example:
 
 ```
-< object type="text/html" data="weather.html">
+<object type="text/html" data="weather.html">
 	<param name="zipCode" value="94123"></param>
 </object>
 ```
@@ -27,7 +27,7 @@ Example:
 When an &lt;object&gt; tag is rendered by the reading system its parameters are added to its URL as querystring parameters. Example after reading system transformation:
 
 ```
-< object type=”text/html” data=”weather.html?zipCode=94123”></object>
+<object type=”text/html” data=”weather.html?zipCode=94123”></object>
 ```
 
 ## Package format
