@@ -32,7 +32,9 @@ When an &lt;object&gt; tag is rendered by the reading system its parameters are 
 
 ## Package format
 
-There currently isn't a packaging format or manifest file required for Inkling widgets. All that's required is a single HTML file to point the &lt;object&gt; tag to.
+There currently isn't a packaging format or manifest file required for Inkling widgets. Though the proposal at https://github.com/IDPF/widgets/wiki/Submission-Request-to-IDPF:-EPUB-Widgets-1.0 seems reasonable.
+
+All that is currently required is a single HTML file to point the &lt;object&gt; tag to. The reading system should leave all files in the widget directory untouched so relative paths work.
 
 
 ## Javascript APIs
@@ -226,8 +228,8 @@ document.addEventListener("visibilityChange", function(){
 
 Inkling converts object tags into iframes when the published content is rendered in the reading system. This is because of browser bugs such as https://bugs.webkit.org/show_bug.cgi?id=75395. IFrames are functionally equivalent to object tags.
 
-## Sandboxing
-Another benefit of rendering object tags as iframes is that iframes support the ‘sandbox’ attribute. Per the HTML5 spec, sandboxing prevents Javascript from accessing document.cookie, localStorage, and the parent window context. This forces widgets to be sandboxed when rendered inside a UIWebView on iOS.
+## Iframe sandbox attribute
+Another benefit of rendering object tags as iframes is that iframes support the ‘sandbox’ attribute. Per the HTML5 spec, sandboxing prevents Javascript from accessing document.cookie, localStorage, and the parent window context. Javascript can be safely run when rendered inside a UIWebView on iOS or when served off the same domain on the Web.
 
 ## Supporting IE8
 Chrome, Safari, mobile Webkit, Firefox, and IE 9/10 support sending objects over postMessage. However, IE8 only supports sending strings over postMessage. A workaround is to use JSON.stringify on all messages sent via postMessage.
