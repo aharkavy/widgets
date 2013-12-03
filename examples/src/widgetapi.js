@@ -59,25 +59,6 @@ function getQueryStringFromParams(objectNode){
     return queryString;
 }
 
-function saveGlobalData(evt){
-    var source = evt.source;
-    var widgetsOnPage = document.querySelectorAll('iframe');
-    [].forEach.call(widgetsOnPage, function(widget){
-        var widgetWin = widget.contentWindow;
-
-        // Skip over the widget that sent the message.
-        if (source !== widgetWin){
-            widget.contentWindow.postMessage({
-                type: 'data',
-                method: 'restoreGlobal',
-                payload: {
-                    storage: evt.data.payload.storage
-                }
-            }, '*');
-        }
-    });
-}
-
 window.addEventListener('message', function(evt){
     if (evt.data.type === 'message' && evt.data.method === 'subscribe'){
         subscribe(evt.data.payload.topic, evt);
@@ -85,8 +66,6 @@ window.addEventListener('message', function(evt){
         unsubscribe(evt.data.payload.topic, evt);
     } else if (evt.data.type === 'message' && evt.data.method === 'publish'){
         broadcastTopic(evt.source, evt.data.payload.topic, evt.data.payload.message);
-    } else if (evt.data.type === 'data' && evt.data.method === 'saveGlobal'){
-        saveGlobalData(evt);
     } else if (evt.data.type === 'view' && evt.data.method === 'set'){
         resize(evt);
     }
