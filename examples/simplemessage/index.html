@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        iframe {
+            /* Highlight the border of the <object> tag. */
+            border: 1px solid red;
+            width: 250px;
+            height: 50px;
+        }
+    </style>
+    <script src="../src/widgetapi.js"></script>
+</head>
+<body>
+    <p>This example represents two widgets in a page:</p>
+    <object data="widget.html"></object>
+    <br/>
+    with content in between them.
+    <br/>
+    <object data="widget.html"></object>
+    <br/>
+    They communicate using a pub/sub messaging framework that uses
+    the HTML5 iframe postMessage API underneath.
+</body>
+</html>
