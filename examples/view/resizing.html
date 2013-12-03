@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            window.addEventListener('load', function(){
+                var expandheight = document.querySelector('#expandheight');
+                expandheight.onclick = function(){
+                    window.parent.postMessage({
+                        type: 'view',
+                        method: 'set',
+                        payload: {
+                            height: 800
+                        }
+                    }, '*');
+                };
+
+                var expandwidth = document.querySelector('#expandwidth');
+                expandwidth.onclick = function(){
+                    window.parent.postMessage({
+                        type: 'view',
+                        method: 'set',
+                        payload: {
+                            width: 800
+                        }
+                    }, '*');
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <button id="expandheight">Add height</button>
+        <button id="expandwidth">Make 600px wide</button>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <script>
+        // When the contents of the widget fully loads, post a message to the parent frame
+        // with the dimensions of the content.
+        window.onload = function(){
+            var input = document.querySelector('input');
+            input.onchange = function(){
+                window.parent.postMessage({
+                    type: 'message',
+                    method: 'publish',
+                    payload: {
+                        topic: 'group a',
+                        message: input.value
+                    }
+                }, '*');
+            };
+            var button = document.querySelector('button');
+            button.onclick = function(){
+                window.parent.postMessage({
+                    type: 'message',
+                    method: 'unsubscribe',
+                    payload: {
+                        topic: 'group a'
+                    }
+                }, '*');
+            };
+        };
+
+        // Subscribe to topic 'group a'.
+        window.parent.postMessage({
+            type: 'message',
+            method: 'subscribe',
+            payload: {
+                topic: 'group a'
+            }
+        }, '*');
+
+        window.addEventListener('message', function(evt){
+            if (evt.data.type === 'message' && evt.data.method === 'publish'
+                && evt.data.payload.topic === 'group a'){
+                document.querySelector('input').value = evt.data.payload.message;
+            }
+        });
+    </script>
+    <style>
+        html, body {
+            
+        }
+    </style>
+</head>
+<body>
+    <input type="range"></input>
+    <button>Unsubscribe</button>
+</body>
+</html>
