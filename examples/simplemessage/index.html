@@ -8,22 +8,21 @@
 
         iframe {
             /* Highlight the border of the <object> tag. */
-            border: 1px solid gray;
-            width: 250px;
+            border: 1px solid red;
+            width: 50%;
             height: 50px;
         }
     </style>
     <script src="../src/widgetapi.js"></script>
 </head>
 <body>
-    <p>This example represents two widgets in an epub page</p>
-    <object data="widget.html"></object>
-    <br/>
-    with content in between them.
-    <br/>
-    <object data="widget.html"></object>
-    <br/>
-    They communicate using a pub/sub messaging framework that uses
-    the HTML5 iframe postMessage underneath.
+    <p>Subscribed to topic "group a":</p>
+    <object data="groupa.html"></object>
+    <p>Subscribed to topic "group a":</p>
+    <object data="groupa.html"></object>
+    <p>Subscribed to topic "group b":</p>
+    <object data="groupb.html"></object>
+    <p>Subscribed to topic "group b":</p>
+    <object data="groupb.html"></object>
 </body>
 </html>
